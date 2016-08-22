@@ -29,7 +29,7 @@ public class EZYGradientView: UIView
   
   //MARK:- Properties
   /// First color of gradient i.e. it appears on top when angleº set to 0.0.
-  @IBInspectable public var firstColor: UIColor = UIColor.whiteColor()
+  @IBInspectable public var firstColor: UIColor = UIColor.white
     {
     didSet
     {
@@ -41,7 +41,7 @@ public class EZYGradientView: UIView
   }
   
   /// Second color of gradient i.e. it appears in bottom when angleº set to 0.0.
-  @IBInspectable public var secondColor: UIColor = UIColor.whiteColor()
+  @IBInspectable public var secondColor: UIColor = UIColor.white
     {
     didSet
     {
@@ -128,7 +128,7 @@ public class EZYGradientView: UIView
     }
   }
   
-  private var blurView = UIVisualEffectView?()
+    private var blurView: UIVisualEffectView?
   public var blurLayer: CALayer?
   public var gradientLayer: CAGradientLayer?
   
@@ -136,37 +136,39 @@ public class EZYGradientView: UIView
   
   override init(frame: CGRect)
   {
+    blurView = UIVisualEffectView(frame: frame)
     super.init(frame: frame)
-    self.backgroundColor = UIColor.clearColor()
+    self.backgroundColor = UIColor.clear
   }
   
   public required init?(coder aDecoder: NSCoder)
   {
     super.init(coder: aDecoder)
-    self.backgroundColor = UIColor.clearColor()
+    self.backgroundColor = UIColor.clear
   }
   
   //MARK:- Draw Rect with steps
   
-  override public func drawRect(rect: CGRect)
-  {
-    if gradientLayer == nil
-    {
-      gradientLayer = CAGradientLayer()
-      gradientLayer!.frame = self.bounds
-      layer.insertSublayer(gradientLayer!, atIndex: 0)
+    public override func draw(_ rect: CGRect) {
+        if gradientLayer == nil
+        {
+            gradientLayer = CAGradientLayer()
+            gradientLayer!.frame = self.bounds
+            layer.insertSublayer(gradientLayer!, at: 0)
+        }
+        self.updateColors()
+        self.updatePoints()
+        self.updateLocation()
+        self.checkBlurStatusAndUpdateOpacity()
+        
     }
-    self.updateColors()
-    self.updatePoints()
-    self.updateLocation()
-    self.checkBlurStatusAndUpdateOpacity()
-  }
+    
   /**
    Step 1
    */
   private func updateColors()
   {
-    gradientLayer!.colors = [firstColor.CGColor, secondColor.CGColor]
+    gradientLayer!.colors = [firstColor.cgColor, secondColor.cgColor]
   }
   /**
    Step 2
@@ -183,7 +185,7 @@ public class EZYGradientView: UIView
   private func updateLocation()
   {
     let colorLoc = locations()
-    gradientLayer!.locations = [colorLoc.0, colorLoc.1]
+    gradientLayer!.locations = [NSNumber(value: colorLoc.0), NSNumber(value: colorLoc.1)]
   }
   /**
    Step 4
@@ -194,12 +196,12 @@ public class EZYGradientView: UIView
     {
       if blurView == nil
       {
-        let blurEffect = UIBlurEffect(style: .Light)
+        let blurEffect = UIBlurEffect(style: .light)
         blurView = UIVisualEffectView(effect: blurEffect)
         blurView?.frame = self.bounds
         blurLayer = blurView?.layer
       }
-      gradientLayer!.colors = [blurColor(firstColor), blurColor(secondColor)]
+        gradientLayer!.colors = [blurColor(color: firstColor), blurColor(color: secondColor)]
       self.layer.insertSublayer(blurLayer!, below: gradientLayer)
     }
     else
@@ -212,9 +214,9 @@ public class EZYGradientView: UIView
   
   //MARK:- Helpers
   
-  private func blurColor(color: UIColor) -> CGColorRef
+  private func blurColor(color: UIColor) -> CGColor
   {
-    return color.colorWithAlphaComponent(CGFloat(0.9 - (blurOpacity / 2))).CGColor
+    return color.withAlphaComponent(CGFloat(0.9 - (blurOpacity / 2))).cgColor
   }
   
   private func startEndPoints() -> (CGPoint, CGPoint)
@@ -245,8 +247,8 @@ public class EZYGradientView: UIView
       rotCalX = 1 - (rotate - 3)
     }
     
-    let start = CGPointMake(1 - CGFloat(rotCalY), 0 + CGFloat(rotCalX))
-    let end = CGPointMake(0 + CGFloat(rotCalY), 1 - CGFloat(rotCalX))
+    let start = CGPoint(x: 1 - CGFloat(rotCalY), y: 0 + CGFloat(rotCalX))
+    let end = CGPoint(x: 0 + CGFloat(rotCalY), y: 1 - CGFloat(rotCalX))
     
     return (start, end)
   }
