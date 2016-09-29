@@ -73,14 +73,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     return 10;
   }
   
-  public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+  open func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
 
     return cell;
   }
   
   
-  @IBAction func sliderChangedValue(sender: AnyObject)
+  @IBAction func sliderChangedValue(_ sender: AnyObject)
   {
     let slider = sender as! UISlider
     

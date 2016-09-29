@@ -24,12 +24,12 @@ import UIKit
 
 @IBDesignable
 
-public class EZYGradientView: UIView
+open class EZYGradientView: UIView
 {
   
   //MARK:- Properties
   /// First color of gradient i.e. it appears on top when angleº set to 0.0.
-  @IBInspectable public var firstColor: UIColor = UIColor.white
+  @IBInspectable open var firstColor: UIColor = UIColor.white
     {
     didSet
     {
@@ -41,7 +41,7 @@ public class EZYGradientView: UIView
   }
   
   /// Second color of gradient i.e. it appears in bottom when angleº set to 0.0.
-  @IBInspectable public var secondColor: UIColor = UIColor.white
+  @IBInspectable open var secondColor: UIColor = UIColor.white
     {
     didSet
     {
@@ -53,7 +53,7 @@ public class EZYGradientView: UIView
   }
   
   /// Angleº will describe the tilt of gradient.
-  @IBInspectable public var angleº: Float = 45.0
+  @IBInspectable open var angleº: Float = 45.0
     {
     didSet
     {
@@ -79,7 +79,7 @@ public class EZYGradientView: UIView
   }
   
   /// Color ratio will describe the proportion of colors. It's value ranges from 0.0 to 1.0 default is 0.5.
-  @IBInspectable public var colorRatio: Float = 0.5
+  @IBInspectable open var colorRatio: Float = 0.5
     {
     didSet
     {
@@ -92,7 +92,7 @@ public class EZYGradientView: UIView
   }
   
   /// Fade intensity will describe the disperse of colors. It's value ranges from 0.0 to 1.0 default is 0.0.
-  @IBInspectable public var fadeIntensity: Float = 0.0
+  @IBInspectable open var fadeIntensity: Float = 0.0
     {
     didSet
     {
@@ -105,7 +105,7 @@ public class EZYGradientView: UIView
   }
   
   /// Is blur allow to add visual effect on gradient view. Can't be change during run-time.
-  @IBInspectable public var isBlur: Bool = false
+  @IBInspectable open var isBlur: Bool = false
     {
     didSet
     {
@@ -116,7 +116,7 @@ public class EZYGradientView: UIView
     }
   }
   /// Blur opacity will describe the transparency of blur. It's value ranges from 0.0 to 1.0 default is 0.0. It is suggested to set EZYGradientView background color as clear color for better results.
-  @IBInspectable public var blurOpacity: Float = 0.0
+  @IBInspectable open var blurOpacity: Float = 0.0
     {
     didSet
     {
@@ -128,9 +128,9 @@ public class EZYGradientView: UIView
     }
   }
   
-    private var blurView: UIVisualEffectView?
-  public var blurLayer: CALayer?
-  public var gradientLayer: CAGradientLayer?
+    fileprivate var blurView: UIVisualEffectView?
+  open var blurLayer: CALayer?
+  open var gradientLayer: CAGradientLayer?
   
   //MARK:- Designated Initializer
   
@@ -149,7 +149,7 @@ public class EZYGradientView: UIView
   
   //MARK:- Draw Rect with steps
   
-    public override func draw(_ rect: CGRect) {
+    open override func draw(_ rect: CGRect) {
         if gradientLayer == nil
         {
             gradientLayer = CAGradientLayer()
@@ -166,14 +166,14 @@ public class EZYGradientView: UIView
   /**
    Step 1
    */
-  private func updateColors()
+  fileprivate func updateColors()
   {
     gradientLayer!.colors = [firstColor.cgColor, secondColor.cgColor]
   }
   /**
    Step 2
    */
-  private func updatePoints()
+  fileprivate func updatePoints()
   {
     let points = startEndPoints()
     gradientLayer!.startPoint = points.0
@@ -182,7 +182,7 @@ public class EZYGradientView: UIView
   /**
    Step 3
    */
-  private func updateLocation()
+  fileprivate func updateLocation()
   {
     let colorLoc = locations()
     gradientLayer!.locations = [NSNumber(value: colorLoc.0), NSNumber(value: colorLoc.1)]
@@ -190,7 +190,7 @@ public class EZYGradientView: UIView
   /**
    Step 4
    */
-  private func checkBlurStatusAndUpdateOpacity()
+  fileprivate func checkBlurStatusAndUpdateOpacity()
   {
     if isBlur
     {
@@ -201,7 +201,7 @@ public class EZYGradientView: UIView
         blurView?.frame = self.bounds
         blurLayer = blurView?.layer
       }
-        gradientLayer!.colors = [blurColor(color: firstColor), blurColor(color: secondColor)]
+        gradientLayer!.colors = [blurColor(firstColor), blurColor(secondColor)]
       self.layer.insertSublayer(blurLayer!, below: gradientLayer)
     }
     else
@@ -214,12 +214,12 @@ public class EZYGradientView: UIView
   
   //MARK:- Helpers
   
-  private func blurColor(color: UIColor) -> CGColor
+  fileprivate func blurColor(_ color: UIColor) -> CGColor
   {
     return color.withAlphaComponent(CGFloat(0.9 - (blurOpacity / 2))).cgColor
   }
   
-  private func startEndPoints() -> (CGPoint, CGPoint)
+  fileprivate func startEndPoints() -> (CGPoint, CGPoint)
   {
     var rotCalX: Float = 0.0
     var rotCalY: Float = 0.0
@@ -253,13 +253,13 @@ public class EZYGradientView: UIView
     return (start, end)
   }
   
-  private func locations() -> (Float, Float)
+  fileprivate func locations() -> (Float, Float)
   {
     let divider = fadeIntensity / self.divider()
     return(colorRatio - divider, colorRatio + divider)
   }
   
-  private func divider() -> Float
+  fileprivate func divider() -> Float
   {
     if colorRatio == 0.1
     {
